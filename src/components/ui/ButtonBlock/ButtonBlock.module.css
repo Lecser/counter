@@ -1,0 +1,11 @@
+.btnContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+    min-width: 100px;
+    min-height: 100px;
+    background-color: #282c34;
+    border: 3px solid mediumslateblue;
+    border-radius: 10px;
+}
