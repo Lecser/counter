@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Display } from "../ui/Display/Display";
 import Button from "../ui/Button/Button";
 import { ButtonBlock } from "../ui/ButtonBlock/ButtonBlock";
@@ -11,6 +11,8 @@ type CounterPropsType = {
   counterMaxValue: number;
   counterMinValue: number;
   setCount: (value: number) => void;
+  setNotice: (noticeValue: string | null) => void;
+  setCounterButtonsDisable: (value: boolean) => void;
 };
 
 export const Counter: FC<CounterPropsType> = ({
@@ -20,7 +22,18 @@ export const Counter: FC<CounterPropsType> = ({
   counterMaxValue,
   counterMinValue,
   setCount,
+  setNotice,
+  setCounterButtonsDisable,
 }) => {
+  useEffect(() => {
+    if (count > 0) {
+      setNotice(null);
+      setCounterButtonsDisable(false);
+    }
+  }, [count]);
+
+  counterMinValue < count && setCount(0);
+
   const disableReset = count === counterMinValue;
   const disableInc = count === counterMaxValue;
 

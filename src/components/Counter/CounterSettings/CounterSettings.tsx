@@ -33,6 +33,32 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
 }) => {
   const [localButtonDisable, setLocalButtonDisable] = useState(false);
 
+  const validation = () => {
+    if (
+      counterMaxValue < counterMinValue ||
+      counterMinValue < 0 ||
+      counterMaxValue === counterMinValue
+    ) {
+      setNotice("error");
+      setLocalButtonDisable(true);
+      setCounterButtonsDisable(true);
+    } else {
+      setNotice("startMessage");
+      setCounterButtonsDisable(true);
+      setLocalButtonDisable(false);
+    }
+  };
+  useEffect(() => {
+    isNaN(counterMinValue) && setCounterMinValue(0);
+  }, [counterMinValue]);
+
+  useEffect(() => {
+    isNaN(counterMaxValue) && setCounterMaxValue(0);
+  }, [counterMaxValue]);
+  useEffect(() => {
+    validation();
+  }, [counterMinValue, counterMaxValue]);
+
   const onChangeCounterMinValue = (e: ChangeEvent<HTMLInputElement>) => {
     setCounterMinValue(Math.floor(e.currentTarget.valueAsNumber));
   };
@@ -53,30 +79,6 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
     setCounterButtonsDisable(false);
     setNotice(null);
   };
-
-  const validation = () => {
-    if (
-      counterMaxValue < counterMinValue ||
-      counterMinValue < 0 ||
-      isNaN(counterMinValue) ||
-      isNaN(counterMaxValue) ||
-      counterMaxValue === counterMinValue
-    ) {
-      setNotice("error");
-      setLocalButtonDisable(true);
-      setCounterButtonsDisable(true);
-      setCount(0);
-    } else {
-      setNotice("startMessage");
-      setCounterButtonsDisable(true);
-      setLocalButtonDisable(false);
-    }
-  };
-
-  useEffect(() => {
-    setNotice(null);
-    validation();
-  }, [counterMinValue, counterMaxValue]);
 
   return (
     <div className={classes.counterSettings}>
