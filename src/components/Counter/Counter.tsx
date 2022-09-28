@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from "react";
 import { Display } from "../ui/Display/Display";
-import Button from "../ui/Button/Button";
+import UniversalButton from "../ui/Button/UniversalButton";
 import { ButtonBlock } from "../ui/ButtonBlock/ButtonBlock";
 import classes from "./Counter.module.css";
 
@@ -10,7 +10,7 @@ type CounterPropsType = {
   count: number;
   counterMaxValue: number;
   counterMinValue: number;
-  setCount: (value: number) => void;
+  setCount: (counterValue: number) => void;
   setNotice: (noticeValue: string | null) => void;
   setCounterButtonsDisable: (value: boolean) => void;
 };
@@ -31,8 +31,9 @@ export const Counter: FC<CounterPropsType> = ({
       setCounterButtonsDisable(false);
     }
   }, [count]);
-
-  counterMinValue < count && setCount(0);
+  useEffect(() => {
+    counterMinValue < count && setCount(0);
+  }, [counterMinValue]);
 
   const disableReset = count === counterMinValue;
   const disableInc = count === counterMaxValue;
@@ -40,7 +41,6 @@ export const Counter: FC<CounterPropsType> = ({
   const buttonIncHandler = () => {
     count < counterMaxValue && setCount(count + 1);
   };
-
   const buttonResetHandler = () => {
     setCount(counterMinValue);
   };
@@ -63,18 +63,18 @@ export const Counter: FC<CounterPropsType> = ({
         )}
       </Display>
       <ButtonBlock>
-        <Button
+        <UniversalButton
           onClick={buttonIncHandler}
           disabled={CounterButtonsDisable || disableInc}
         >
           inc
-        </Button>
-        <Button
+        </UniversalButton>
+        <UniversalButton
           onClick={buttonResetHandler}
           disabled={CounterButtonsDisable || disableReset}
         >
           Reset
-        </Button>
+        </UniversalButton>
       </ButtonBlock>
     </div>
   );

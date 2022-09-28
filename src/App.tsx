@@ -38,15 +38,15 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("counterMinValue", JSON.stringify(counterMinValue));
-  }, ["counterMinValue", counterMinValue]);
+  }, [counterMinValue]);
 
   useEffect(() => {
     localStorage.setItem("counterMaxValue", JSON.stringify(counterMaxValue));
-  }, ["counterMaxValue", counterMaxValue]);
+  }, [counterMaxValue]);
 
   useEffect(() => {
     localStorage.setItem("counterValue", JSON.stringify(count));
-  }, ["counterValue", count]);
+  }, [count]);
 
   return (
     <div className="App">

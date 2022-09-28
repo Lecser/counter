@@ -6,18 +6,18 @@ import React, {
   useState,
 } from "react";
 import { Display } from "../../ui/Display/Display";
-import Button from "../../ui/Button/Button";
+import UniversalButton from "../../ui/Button/UniversalButton";
 import { ButtonBlock } from "../../ui/ButtonBlock/ButtonBlock";
 import classes from "./CounterSettings.module.css";
 
 type CounterSettingsPropsType = {
   counterMaxValue: number;
   counterMinValue: number;
-  setCounterMaxValue: (CounterValue: number) => void;
-  setCounterMinValue: (CounterValue: number) => void;
-  setNotice: (errorValue: string | null) => void;
+  setCounterMaxValue: (counterMaxValue: number) => void;
+  setCounterMinValue: (counterMinValue: number) => void;
+  setNotice: (NoticeValue: string | null) => void;
   setCounterButtonsDisable: (value: boolean) => void;
-  setCount: (value: number) => void;
+  setCount: (counterValue: number) => void;
   notice: string | null;
 };
 
@@ -33,7 +33,16 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
 }) => {
   const [localButtonDisable, setLocalButtonDisable] = useState(false);
 
-  const validation = () => {
+  useEffect(() => {
+    isNaN(counterMinValue) && setCounterMinValue(0);
+  }, [counterMinValue]);
+
+  useEffect(() => {
+    isNaN(counterMaxValue) && setCounterMaxValue(0);
+  }, [counterMaxValue]);
+
+  useEffect(() => {
+    console.log("проверка2");
     if (
       counterMaxValue < counterMinValue ||
       counterMinValue < 0 ||
@@ -47,23 +56,12 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
       setCounterButtonsDisable(true);
       setLocalButtonDisable(false);
     }
-  };
-  useEffect(() => {
-    isNaN(counterMinValue) && setCounterMinValue(0);
-  }, [counterMinValue]);
-
-  useEffect(() => {
-    isNaN(counterMaxValue) && setCounterMaxValue(0);
-  }, [counterMaxValue]);
-  useEffect(() => {
-    validation();
   }, [counterMinValue, counterMaxValue]);
 
-  const onChangeCounterMinValue = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeCounterMinValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setCounterMinValue(Math.floor(e.currentTarget.valueAsNumber));
   };
-
-  const onChangeCounterMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeCounterMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setCounterMaxValue(Math.floor(e.currentTarget.valueAsNumber));
   };
 
@@ -72,7 +70,6 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
       btnHandler();
     }
   };
-
   const btnHandler = () => {
     setLocalButtonDisable(false);
     setCount(counterMinValue);
@@ -90,7 +87,7 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
               onKeyUp={onKeyPressHandler}
               type={"number"}
               value={counterMinValue.toFixed()}
-              onChange={onChangeCounterMinValue}
+              onChange={onChangeCounterMinValueHandler}
               className={
                 notice === "error" ? classes.inputError : classes.input
               }
@@ -102,7 +99,7 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
               onKeyUp={onKeyPressHandler}
               type={"number"}
               value={counterMaxValue.toFixed()}
-              onChange={onChangeCounterMaxValue}
+              onChange={onChangeCounterMaxValueHandler}
               className={
                 notice === "error" ? classes.inputError : classes.input
               }
@@ -111,9 +108,9 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
         </div>
       </Display>
       <ButtonBlock>
-        <Button onClick={btnHandler} disabled={localButtonDisable}>
+        <UniversalButton onClick={btnHandler} disabled={localButtonDisable}>
           Set
-        </Button>
+        </UniversalButton>
       </ButtonBlock>
     </div>
   );
