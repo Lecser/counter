@@ -42,7 +42,6 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
   }, [counterMaxValue]);
 
   useEffect(() => {
-    console.log("проверка2");
     if (
       counterMaxValue < counterMinValue ||
       counterMinValue < 0 ||

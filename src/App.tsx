@@ -5,8 +5,7 @@ import { CounterSettings } from "./components/Counter/CounterSettings/CounterSet
 import { Counter } from "./components/Counter/Counter";
 
 function App() {
-  const [counterButtonsDisable, setCounterButtonsDisable] =
-    useState<boolean>(false);
+  const [counterButtonsDisable, setCounterButtonsDisable] = useState(false);
   const [counterMinValue, setCounterMinValue] = useState(0);
   const [counterMaxValue, setCounterMaxValue] = useState(5);
   const [notice, setNotice] = useState<string | null>(null);
