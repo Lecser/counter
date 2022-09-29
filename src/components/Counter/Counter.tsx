@@ -31,12 +31,6 @@ export const Counter: FC<CounterPropsType> = ({
       setCounterButtonsDisable(false);
     }
   }, [count]);
-  useEffect(() => {
-    if (count === counterMinValue) {
-      setNotice(null);
-      setCounterButtonsDisable(false);
-    }
-  }, [count]);
 
   const disableReset = count === counterMinValue;
   const disableInc = count === counterMaxValue;
