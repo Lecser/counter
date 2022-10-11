@@ -7,8 +7,7 @@ type CounterReducerActionType =
   | setCounterMaxValueACType
   | setStartMessageStatusACACType
   | setErrorStatusACType
-  | setCountStatusACType
-  | setCounterValueACType;
+  | setCountStatusACType;
 
 const initialState = {
   counterMinValue: 0,
@@ -24,9 +23,6 @@ export const counterReducer = (
   switch (action.type) {
     case COUNTER_INC: {
       return { ...state, count: state.count + 1 };
-    }
-    case SET_COUNT_VALUE: {
-      return { ...state, count: action.payload.counterMinValue };
     }
     case COUNTER_RESET: {
       return { ...state, count: action.payload.counterMinValue };
@@ -57,7 +53,6 @@ const SET_COUNTER_MAX_VALUE = "SET_COUNTER_MAX_VALUE";
 const SET_START_MESSAGE_STATUS = "SET_START_MESSAGE_STATUS";
 const SET_ERROR_STATUS = "SET_ERROR_STATUS";
 const SET_COUNT_STATUS = "SET_COUNT_STATUS";
-const SET_COUNT_VALUE = "SET_COUNT_VALUE";
 
 type counterIncACType = ReturnType<typeof counterIncAC>;
 type counterResetACACType = ReturnType<typeof counterResetAC>;
@@ -66,7 +61,6 @@ type setCounterMaxValueACType = ReturnType<typeof setCounterMaxValueAC>;
 type setStartMessageStatusACACType = ReturnType<typeof setStartMessageStatusAC>;
 type setErrorStatusACType = ReturnType<typeof setErrorStatusAC>;
 type setCountStatusACType = ReturnType<typeof setCountStatusAC>;
-type setCounterValueACType = ReturnType<typeof setCounterValueAC>;
 
 export const counterIncAC = () => {
   return {
@@ -76,12 +70,6 @@ export const counterIncAC = () => {
 export const counterResetAC = (counterMinValue: number) => {
   return {
     type: COUNTER_RESET,
-    payload: { counterMinValue },
-  } as const;
-};
-export const setCounterValueAC = (counterMinValue: number) => {
-  return {
-    type: SET_COUNT_VALUE,
     payload: { counterMinValue },
   } as const;
 };

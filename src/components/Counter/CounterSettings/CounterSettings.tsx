@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, KeyboardEvent, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { Display } from "../../ui/Display/Display";
 import UniversalButton from "../../ui/Button/UniversalButton";
 import { ButtonBlock } from "../../ui/ButtonBlock/ButtonBlock";
@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppStateType } from "../../../store";
 import { StatusType } from "../../../App";
 import {
+  counterResetAC,
   setCounterMaxValueAC,
   setCounterMinValueAC,
-  setCounterValueAC,
   setCountStatusAC,
   setErrorStatusAC,
   setStartMessageStatusAC,
 } from "../../../store/reducers/counterReducer";
+import { Input } from "../../ui/Input/Input";
 
 export const CounterSettings: FC = () => {
   const counterMinValue = useSelector<AppStateType, number>(
@@ -28,14 +29,6 @@ export const CounterSettings: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    isNaN(counterMinValue) && dispatch(setCounterMinValueAC(0));
-  }, [counterMinValue]);
-
-  useEffect(() => {
-    isNaN(counterMaxValue) && dispatch(setCounterMaxValueAC(0));
-  }, [counterMaxValue]);
-
-  useEffect(() => {
     if (
       counterMaxValue < counterMinValue ||
       counterMinValue < 0 ||
@@ -47,21 +40,18 @@ export const CounterSettings: FC = () => {
     }
   }, [counterMinValue, counterMaxValue, dispatch]);
 
-  const onChangeCounterMinValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setCounterMinValueAC(Math.floor(e.currentTarget.valueAsNumber)));
+  const onChangeCounterMinValueHandler = (value: number) => {
+    dispatch(setCounterMinValueAC(value));
   };
-  const onChangeCounterMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setCounterMaxValueAC(Math.floor(e.currentTarget.valueAsNumber)));
+  const onChangeCounterMaxValueHandler = (value: number) => {
+    dispatch(setCounterMaxValueAC(value));
   };
 
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      btnHandler();
-    }
-  };
   const btnHandler = () => {
-    dispatch(setCountStatusAC());
-    dispatch(setCounterValueAC(counterMinValue));
+    if (status !== "error") {
+      dispatch(setCountStatusAC());
+      dispatch(counterResetAC(counterMinValue));
+    }
   };
 
   return (
@@ -70,26 +60,20 @@ export const CounterSettings: FC = () => {
         <div className={classes.inputsContainer}>
           <div className={classes.inputWrapper}>
             <div className={classes.counterValue}>Min Value:</div>
-            <input
-              onKeyUp={onKeyPressHandler}
-              type={"number"}
-              value={counterMinValue.toFixed()}
-              onChange={onChangeCounterMinValueHandler}
-              className={
-                status === "error" ? classes.inputError : classes.input
-              }
+            <Input
+              value={counterMinValue}
+              onChangeNumber={onChangeCounterMinValueHandler}
+              error={status === "error"}
+              onEnter={btnHandler}
             />
           </div>
           <div className={classes.inputWrapper}>
             <div className={classes.counterValue}>Max Value:</div>
-            <input
-              onKeyUp={onKeyPressHandler}
-              type={"number"}
-              value={counterMaxValue.toFixed()}
-              onChange={onChangeCounterMaxValueHandler}
-              className={
-                status === "error" ? classes.inputError : classes.input
-              }
+            <Input
+              value={counterMaxValue}
+              onChangeNumber={onChangeCounterMaxValueHandler}
+              error={status === "error"}
+              onEnter={btnHandler}
             />
           </div>
         </div>

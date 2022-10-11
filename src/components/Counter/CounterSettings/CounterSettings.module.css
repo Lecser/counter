@@ -38,27 +38,7 @@
     justify-content: space-evenly;
 }
 
-.input {
-    display: inline-block;
-    width: 125px;
-    padding: 12px 10px;
-    margin: 8px 0 ;
-    box-sizing: border-box;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 18px;
 
-}.inputError {
-    display: inline-block;
-    width: 125px;
-    padding: 12px 10px;
-    margin: 8px 0 ;
-    box-sizing: border-box;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 18px;
-    border: hotpink solid 1px;
-}
 
 
 .inputWrapper{
