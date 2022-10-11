@@ -2,8 +2,8 @@ import React, {
   ChangeEvent,
   DetailedHTMLProps,
   InputHTMLAttributes,
-  ReactNode,
   KeyboardEvent,
+  ReactNode,
 } from "react";
 import classes from "./Input.module.css";
 

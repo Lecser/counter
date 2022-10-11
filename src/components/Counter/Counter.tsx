@@ -1,15 +1,15 @@
 import React, { FC } from "react";
 import { Display } from "../ui/Display/Display";
-import UniversalButton from "../ui/Button/UniversalButton";
 import { ButtonBlock } from "../ui/ButtonBlock/ButtonBlock";
 import classes from "./Counter.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { AppStateType } from "../../store";
+import { AppStateType } from "../../store/store";
 import { StatusType } from "../../App";
 import {
   counterIncAC,
   counterResetAC,
 } from "../../store/reducers/counterReducer";
+import { UniversalButton } from "../ui/Button/UniversalButton";
 
 export const Counter: FC = () => {
   const count = useSelector<AppStateType, number>(

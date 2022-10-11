@@ -1,10 +1,9 @@
 import React, { FC, useEffect } from "react";
 import { Display } from "../../ui/Display/Display";
-import UniversalButton from "../../ui/Button/UniversalButton";
 import { ButtonBlock } from "../../ui/ButtonBlock/ButtonBlock";
 import classes from "./CounterSettings.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { AppStateType } from "../../../store";
+import { AppStateType } from "../../../store/store";
 import { StatusType } from "../../../App";
 import {
   counterResetAC,
@@ -15,6 +14,7 @@ import {
   setStartMessageStatusAC,
 } from "../../../store/reducers/counterReducer";
 import { Input } from "../../ui/Input/Input";
+import { UniversalButton } from "../../ui/Button/UniversalButton";
 
 export const CounterSettings: FC = () => {
   const counterMinValue = useSelector<AppStateType, number>(

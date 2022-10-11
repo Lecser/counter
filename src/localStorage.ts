@@ -1,4 +1,4 @@
-import { AppStateType } from "./store";
+import { AppStateType } from "./store/store";
 
 // Loads the state and returns an object that can be provided as the
 // preloadedState parameter of store.js's call to configureStore

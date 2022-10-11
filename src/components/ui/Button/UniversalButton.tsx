@@ -8,7 +8,7 @@ type DefaultButtonPropsType = DetailedHTMLProps<
 
 type ButtonPropsType = DefaultButtonPropsType & {};
 
-const UniversalButton: React.FC<ButtonPropsType> = ({
+export const UniversalButton: React.FC<ButtonPropsType> = ({
   className,
   ...restProps
 }) => {
@@ -16,5 +16,3 @@ const UniversalButton: React.FC<ButtonPropsType> = ({
 
   return <button className={finalClassName} {...restProps} />;
 };
-
-export default UniversalButton;
