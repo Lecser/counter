@@ -1,44 +1,38 @@
-import React, {
-  ChangeEvent,
-  KeyboardEvent,
-  FC,
-  useEffect,
-  useState,
-} from "react";
+import React, { ChangeEvent, FC, KeyboardEvent, useEffect } from "react";
 import { Display } from "../../ui/Display/Display";
 import UniversalButton from "../../ui/Button/UniversalButton";
 import { ButtonBlock } from "../../ui/ButtonBlock/ButtonBlock";
 import classes from "./CounterSettings.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { AppStateType } from "../../../store";
+import { StatusType } from "../../../App";
+import {
+  setCounterMaxValueAC,
+  setCounterMinValueAC,
+  setCounterValueAC,
+  setCountStatusAC,
+  setErrorStatusAC,
+  setStartMessageStatusAC,
+} from "../../../store/reducers/counterReducer";
 
-type CounterSettingsPropsType = {
-  counterMaxValue: number;
-  counterMinValue: number;
-  setCounterMaxValue: (counterMaxValue: number) => void;
-  setCounterMinValue: (counterMinValue: number) => void;
-  setNotice: (NoticeValue: string | null) => void;
-  setCounterButtonsDisable: (value: boolean) => void;
-  setCount: (counterValue: number) => void;
-  notice: string | null;
-};
-
-export const CounterSettings: FC<CounterSettingsPropsType> = ({
-  counterMaxValue,
-  counterMinValue,
-  setCounterMaxValue,
-  setCounterMinValue,
-  setNotice,
-  setCounterButtonsDisable,
-  setCount,
-  notice,
-}) => {
-  const [localButtonDisable, setLocalButtonDisable] = useState(false);
+export const CounterSettings: FC = () => {
+  const counterMinValue = useSelector<AppStateType, number>(
+    (store) => store.counter.counterMinValue
+  );
+  const counterMaxValue = useSelector<AppStateType, number>(
+    (store) => store.counter.counterMaxValue
+  );
+  const status = useSelector<AppStateType, StatusType>(
+    (store) => store.counter.status
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    isNaN(counterMinValue) && setCounterMinValue(0);
+    isNaN(counterMinValue) && dispatch(setCounterMinValueAC(0));
   }, [counterMinValue]);
 
   useEffect(() => {
-    isNaN(counterMaxValue) && setCounterMaxValue(0);
+    isNaN(counterMaxValue) && dispatch(setCounterMaxValueAC(0));
   }, [counterMaxValue]);
 
   useEffect(() => {
@@ -47,21 +41,17 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
       counterMinValue < 0 ||
       counterMaxValue === counterMinValue
     ) {
-      setNotice("error");
-      setLocalButtonDisable(true);
-      setCounterButtonsDisable(true);
+      dispatch(setErrorStatusAC());
     } else {
-      setNotice("startMessage");
-      setCounterButtonsDisable(true);
-      setLocalButtonDisable(false);
+      dispatch(setStartMessageStatusAC());
     }
-  }, [counterMinValue, counterMaxValue]);
+  }, [counterMinValue, counterMaxValue, dispatch]);
 
   const onChangeCounterMinValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setCounterMinValue(Math.floor(e.currentTarget.valueAsNumber));
+    dispatch(setCounterMinValueAC(Math.floor(e.currentTarget.valueAsNumber)));
   };
   const onChangeCounterMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setCounterMaxValue(Math.floor(e.currentTarget.valueAsNumber));
+    dispatch(setCounterMaxValueAC(Math.floor(e.currentTarget.valueAsNumber)));
   };
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -70,10 +60,8 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
     }
   };
   const btnHandler = () => {
-    setLocalButtonDisable(false);
-    setCount(counterMinValue);
-    setCounterButtonsDisable(false);
-    setNotice(null);
+    dispatch(setCountStatusAC());
+    dispatch(setCounterValueAC(counterMinValue));
   };
 
   return (
@@ -88,7 +76,7 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
               value={counterMinValue.toFixed()}
               onChange={onChangeCounterMinValueHandler}
               className={
-                notice === "error" ? classes.inputError : classes.input
+                status === "error" ? classes.inputError : classes.input
               }
             />
           </div>
@@ -100,14 +88,14 @@ export const CounterSettings: FC<CounterSettingsPropsType> = ({
               value={counterMaxValue.toFixed()}
               onChange={onChangeCounterMaxValueHandler}
               className={
-                notice === "error" ? classes.inputError : classes.input
+                status === "error" ? classes.inputError : classes.input
               }
             />
           </div>
         </div>
       </Display>
       <ButtonBlock>
-        <UniversalButton onClick={btnHandler} disabled={localButtonDisable}>
+        <UniversalButton onClick={btnHandler} disabled={status === "error"}>
           Set
         </UniversalButton>
       </ButtonBlock>

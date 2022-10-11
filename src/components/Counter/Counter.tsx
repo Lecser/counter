@@ -1,53 +1,47 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { Display } from "../ui/Display/Display";
 import UniversalButton from "../ui/Button/UniversalButton";
 import { ButtonBlock } from "../ui/ButtonBlock/ButtonBlock";
 import classes from "./Counter.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { AppStateType } from "../../store";
+import { StatusType } from "../../App";
+import {
+  counterIncAC,
+  counterResetAC,
+} from "../../store/reducers/counterReducer";
 
-type CounterPropsType = {
-  notice: string | null;
-  CounterButtonsDisable: boolean;
-  count: number;
-  counterMaxValue: number;
-  counterMinValue: number;
-  setCount: (counterValue: number) => void;
-  setNotice: (noticeValue: string | null) => void;
-  setCounterButtonsDisable: (value: boolean) => void;
-};
-
-export const Counter: FC<CounterPropsType> = ({
-  notice,
-  CounterButtonsDisable,
-  count,
-  counterMaxValue,
-  counterMinValue,
-  setCount,
-  setNotice,
-  setCounterButtonsDisable,
-}) => {
-  useEffect(() => {
-    if (count === counterMinValue) {
-      setNotice(null);
-      setCounterButtonsDisable(false);
-    }
-  }, [count]);
+export const Counter: FC = () => {
+  const count = useSelector<AppStateType, number>(
+    (store) => store.counter.count
+  );
+  const counterMinValue = useSelector<AppStateType, number>(
+    (store) => store.counter.counterMinValue
+  );
+  const counterMaxValue = useSelector<AppStateType, number>(
+    (store) => store.counter.counterMaxValue
+  );
+  const status = useSelector<AppStateType, StatusType>(
+    (store) => store.counter.status
+  );
+  const dispatch = useDispatch();
 
   const disableReset = count === counterMinValue;
   const disableInc = count === counterMaxValue;
 
   const buttonIncHandler = () => {
-    count < counterMaxValue && setCount(count + 1);
+    count < counterMaxValue && dispatch(counterIncAC());
   };
   const buttonResetHandler = () => {
-    setCount(counterMinValue);
+    dispatch(counterResetAC(counterMinValue));
   };
 
   return (
     <div className={classes.counter}>
       <Display>
-        {notice === "error" ? (
+        {status === "error" ? (
           <div className={classes.errorMessage}>Incorrect Value</div>
-        ) : notice === "startMessage" ? (
+        ) : status === "startMessage" ? (
           <div className={classes.startMessage}>
             Enter values and press "Set"
           </div>
@@ -62,13 +56,13 @@ export const Counter: FC<CounterPropsType> = ({
       <ButtonBlock>
         <UniversalButton
           onClick={buttonIncHandler}
-          disabled={CounterButtonsDisable || disableInc}
+          disabled={status !== "count" || disableInc}
         >
           inc
         </UniversalButton>
         <UniversalButton
           onClick={buttonResetHandler}
-          disabled={CounterButtonsDisable || disableReset}
+          disabled={status !== "count" || disableReset}
         >
           Reset
         </UniversalButton>
