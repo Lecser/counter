@@ -1,10 +1,10 @@
-import React, { FC, ReactNode } from "react";
+import React, {FC, memo, ReactNode} from "react";
 import classes from "./Display.module.css";
 
 type DisplayPropsType = {
   children: ReactNode;
 };
 
-export const Display: FC<DisplayPropsType> = ({ children }) => {
-  return <div className={classes.displayContainer}>{children}</div>;
-};
+export const Display: FC<DisplayPropsType> = memo(({ children }) => {
+    return <div className={classes.displayContainer}>{children}</div>;
+});

@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+import React, {ButtonHTMLAttributes, DetailedHTMLProps, memo} from "react";
 import classes from "./Button.module.css";
 
 type DefaultButtonPropsType = DetailedHTMLProps<
@@ -8,11 +8,11 @@ type DefaultButtonPropsType = DetailedHTMLProps<
 
 type ButtonPropsType = DefaultButtonPropsType & {};
 
-export const UniversalButton: React.FC<ButtonPropsType> = ({
-  className,
-  ...restProps
+export const UniversalButton: React.FC<ButtonPropsType> = memo(({
+    className,
+    ...restProps
 }) => {
-  const finalClassName = `${classes.default} `;
+    const finalClassName = `${classes.default} `;
 
-  return <button className={finalClassName} {...restProps} />;
-};
+    return <button className={finalClassName} {...restProps} />;
+});
